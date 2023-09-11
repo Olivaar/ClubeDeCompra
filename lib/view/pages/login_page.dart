@@ -107,13 +107,22 @@ class _LoginPageState  extends State<LoginPage>{
                         ),
                       ),
                       SizedBox(height: 5,),
-                      const Row(
+                      Row(
                         mainAxisAlignment: MainAxisAlignment.end,
                         children: [
-                          Text(
-                            'ESQUECI MINHA SENHA',
-                            style: TextStyle(color: Colors.white),
-                          )
+                          TextButton(
+                            style: ButtonStyle(
+                              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+                              textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+                              ))
+                            ),
+                            onPressed: (){
+                              Navigator.pushNamed(context, '/EsqueciSenha');
+                            },
+                            child: const Text(
+                              'esqueci minha senha',
+                            ),
+                          ),
                         ],
                       ),
                       SizedBox(height: 10,),
@@ -121,7 +130,9 @@ class _LoginPageState  extends State<LoginPage>{
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           TextButton.icon(
-                            onPressed: (){},
+                            onPressed: (){
+                              Navigator.pushNamed(context, '/Home');
+                            },
                             icon: Icon(Icons.vaccines),
                             label: Text('ENTRAR'),
                             style: ButtonStyle(
@@ -144,7 +155,7 @@ class _LoginPageState  extends State<LoginPage>{
                               ))
                             ),
                             onPressed: (){
-                              Navigator.pushNamed(context, '/cadastroPage');
+                              Navigator.pushNamed(context, '/Cadastro');
                             },
                             child: const Text(
                               'NÃO POSSUI UMA CONTA? CADASTRE-SE AGORA',

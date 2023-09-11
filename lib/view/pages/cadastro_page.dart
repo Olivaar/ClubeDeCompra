@@ -15,7 +15,6 @@ class _CadastroPageState  extends State<CadastroPage>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
       body: Stack(
         children: [
           Container(
@@ -39,10 +38,10 @@ class _CadastroPageState  extends State<CadastroPage>{
                       'assets/images/logo_essense_sem_fundo.png',
                       height: 250,
                       width: 250,
-                    )
+                    ),
                   ],
                 ),
-                Container(
+                SizedBox(
                   width: 500,
                   child: Card(
                     elevation: 18.0,
@@ -58,7 +57,7 @@ class _CadastroPageState  extends State<CadastroPage>{
                               fontWeight: FontWeight.bold, color: Colors.white,
                             ),
                           ),
-                          SizedBox(height: 10,),
+                          const SizedBox(height: 10,),
                           const Text(
                             'DADOS PESSOAIS',
                             style: TextStyle(
@@ -84,7 +83,7 @@ class _CadastroPageState  extends State<CadastroPage>{
                             ),
                           ),
                           const SizedBox(height: 4,),
-                          Divider(),
+                          const Divider(),
                           const Text(
                             'DADOS DA EMPRESA',
                             style: TextStyle(
@@ -140,7 +139,7 @@ class _CadastroPageState  extends State<CadastroPage>{
                                           TextButton(
                                             child: const Text('Fechar'),
                                             onPressed: () {
-                                              Navigator.pushNamed(context, '/loginPage');
+                                              Navigator.pushNamed(context, '/Login');
                                             },
                                           ),
                                         ],
@@ -148,8 +147,8 @@ class _CadastroPageState  extends State<CadastroPage>{
                                     },
                                   );
                                 },
-                                icon: Icon(Icons.vaccines),
-                                label: Text('SOLICITAR CONTA'),
+                                icon: const Icon(Icons.vaccines),
+                                label: const Text('SOLICITAR CONTA'),
                                 style: ButtonStyle(
                                   backgroundColor: MaterialStateProperty.all<Color>(const Color(0xffFFffff)),
                                   foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
@@ -157,14 +156,14 @@ class _CadastroPageState  extends State<CadastroPage>{
                                     fontWeight: FontWeight.bold,
                                   ))
                                 ),
-                              )
+                              ),
                             ],
                           ),
                         ],
                       ),
                     ),
                   ),
-                )
+                ),
               ],
             ),
           ),
