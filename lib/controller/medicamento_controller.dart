@@ -33,6 +33,7 @@ class MedicamentoController {
       apresentacao: '20 MG COM REV CT BL AL AL X 500 (EMB HOSP)',
       tipoDeProduto: 'Genérico',
     );
+  
 
   void aux(){
     medicamentos.add(medicamentoTeste);

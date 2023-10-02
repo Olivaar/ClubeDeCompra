@@ -18,7 +18,7 @@ class WidgetMedicamentoSearch extends StatelessWidget {
     return Card(
       color: Colors.white,
       child: Container(
-        padding: EdgeInsets.all(6),
+        padding: const EdgeInsets.all(6),
         height: 40, width: 510,
         child: TextButton(
           onPressed: () {

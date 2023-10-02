@@ -1,20 +1,38 @@
-import 'package:clube_de_compra/model/entities/medicamento.dart';
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Cotacao {
-  late int id;
-  late DateTime data;
+  late String id;
+  late Timestamp data;
+  late List<String> medicamentos = [];
   late String? status;
-  late List<Medicamento> medicamentos = [];
+  late double? valor;
 
   Cotacao({
     required this.id,
     required this.data,
     required this.medicamentos,
-    this.status
-  });
+    this.status,
+    this.valor
+  }) {
+    id = Random().nextInt(1000000).toString();
+  }
 
-  @override
-  String toString() {
-    return 'Cotacao{id: $id, data: $data, medicamentos: $medicamentos}';
+  Cotacao.fromJson(Map<String, dynamic> json)
+    : id = json['id'],
+      data = json['data'],
+      medicamentos = (json['medicamentos'] as List<dynamic>?)?.map((e) => e.toString()).toList() ?? [],
+      status = json['status'],
+      valor = json['valor'];
+
+  Map<String, dynamic> toJson(){
+    return{
+      'id': id,
+      'data': data,
+      'medicamentos': medicamentos,
+      'status': status,
+      'valor': valor,
+    };
   }
 }

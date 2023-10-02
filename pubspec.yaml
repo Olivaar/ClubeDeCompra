@@ -37,6 +37,10 @@ dependencies:
   cupertino_icons: ^1.0.2
   hexcolor: ^2.0.4
   flutter_spinbox: ^0.13.1
+  firebase_core: ^2.16.0
+  firebase_auth: ^4.10.0
+  cloud_firestore: ^4.9.2
+  firebase_messaging: ^14.6.8
 
 dev_dependencies:
   flutter_test:
