@@ -58,8 +58,8 @@ class _LoginPageState  extends State<LoginPage>{
                           color: const Color(0xff0000FF),
                         ),
                         child: const Text(
-                          'Somos a Essence Brasil a maior plataforma de cotação'
-                          'de, produtos farmaceuticos em território nacional!',
+                          'Somos a Essence Brasil a maior plataforma de cotação '
+                          'de produtos farmaceuticos em território nacional!',
                           style: TextStyle(color: Colors.white),
                         ),
                       )

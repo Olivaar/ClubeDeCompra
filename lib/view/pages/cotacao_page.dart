@@ -115,7 +115,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                                                 medicamentosCotados.add(medicamento);
                                               });
                                             },
-                                            icon: Icon(Icons.add),
+                                            icon: const Icon(Icons.add),
                                           )
                                         ],
                                       ),
@@ -165,10 +165,10 @@ class _CotacaoPageState extends State<CotacaoPage> {
                                   context: context,
                                   builder: (BuildContext context) {
                                     return AlertDialog(
-                                      title: const Text('CONTACAO SOLICITADA!'),
+                                      title: const Text('COTAÇÃO SOLICITADA!'),
                                       content: const Text(
-                                          'Eviamos sua cotação para os forncedores em ate 24 horas sera respondida'
-                                              'caso nao ouver resposta ela sera excluida automaticmente!'
+                                        'Enviamos sua cotação para os fornecedores e em até 24 horas será respondida. \n'
+                                        'Caso não seja respondida neste prazo, a cotação será excluída automaticamente.'
                                       ),
                                       actions: [
                                         TextButton(
@@ -222,7 +222,6 @@ class _CotacaoPageState extends State<CotacaoPage> {
     setState(() {
       medicamentosSearch = resultados;
     });
-    print(medicamentosSearch);
   }
 
 }
