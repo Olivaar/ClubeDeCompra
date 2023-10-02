@@ -1,10 +1,13 @@
 import 'package:clube_de_compra/controller/medicamento_controller.dart';
 import 'package:clube_de_compra/model/entities/medicamento.dart';
+import 'package:clube_de_compra/view/widgets/alert_aviso.dart';
 import 'package:clube_de_compra/view/widgets/appBar_clube_de_compra.dart';
 import 'package:clube_de_compra/view/widgets/drawerCDC.dart';
 import 'package:clube_de_compra/view/widgets/theme_helper.dart';
+import 'package:clube_de_compra/view/widgets/widget_medicamento_cotado.dart';
 import 'package:clube_de_compra/view/widgets/widget_medicamento_serch.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_spinbox/flutter_spinbox.dart';
 
 class CotacaoPage extends StatefulWidget {
   const CotacaoPage({super.key});
@@ -44,161 +47,161 @@ class _CotacaoPageState extends State<CotacaoPage> {
             color: Colors.white.withOpacity(0.50),
           ),
           SingleChildScrollView(
-            child: Container(
-              margin: const EdgeInsets.only(top: 40),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
+            padding: const EdgeInsets.only(top: 40),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                Container(
+                  width: 600,
+                  padding: const EdgeInsets.fromLTRB(16, 16,16, 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff2EB6FC),
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(color: Colors.black45),
+                  ),
+                  child: Column(
                     children: [
-                      Container(
-                        width: 600,
-                        padding: const EdgeInsets.fromLTRB(16, 16,16, 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff2EB6FC),
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(color: Colors.black45),
+                      const Text(
+                        'Pesquise o Produto',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold, color: Colors.white,
                         ),
-                        child: Column(
-                          children: [
-                            const Text(
-                              'Pesquise o Produto',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold, color: Colors.white,
+                      ),
+                      const SizedBox(height: 15,),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            width: 400,
+                            child: TextFormField(
+                              controller: medicamentoController,
+                              decoration: ThemeHelper().textInputDecoration(
+                                'Pesquise um produto', 'Digite o nome do produto...',
                               ),
                             ),
-                            const SizedBox(height: 15,),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 400,
-                                  child: TextFormField(
-                                    controller: medicamentoController,
-                                    decoration: ThemeHelper().textInputDecoration(
-                                      'Pesquise um produto', 'Digite o nome do produto...',
-                                    ),
-                                  ),
-                                ),
-                                const SizedBox(width: 5,),
-                                IconButton(
-                                  style: ThemeHelper().buttonStyle(),
-                                  onPressed: () {
-                                    buscarMedicamentos();
-                                  },
-                                  icon: const Icon(Icons.search_rounded),
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 15,),
-                            SizedBox(
-                              child: SingleChildScrollView(
-                                child: ListView(
-                                  shrinkWrap: true,
+                          ),
+                          const SizedBox(width: 5,),
+                          IconButton(
+                            style: ThemeHelper().buttonStyle(),
+                            onPressed: () {
+                              buscarMedicamentos();
+                            },
+                            icon: const Icon(Icons.search_rounded, color: Colors.white,),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 15,),
+                      SizedBox(
+                        child: SingleChildScrollView(
+                          child: ListView(
+                            shrinkWrap: true,
+                            children: [
+                              for(Medicamento medicamento in medicamentosSearch)
+                                Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    for(Medicamento medicamento in medicamentosSearch)
-                                      Row(
-                                        mainAxisAlignment: MainAxisAlignment.center,
-                                        children: [
-                                          WidgetMedicamentoSearch(
-                                            nomeProduto: medicamento.nomeProduto,
-                                            apresentacao: medicamento.apresentacao,
-                                            onPressed: (){
-
-                                            },
-                                          ),
-                                          IconButton(
-                                            onPressed: () {
-                                              setState(() {
-                                                medicamentosCotados.add(medicamento);
-                                              });
-                                            },
-                                            icon: const Icon(Icons.add),
-                                          )
-                                        ],
-                                      ),
+                                    WidgetMedicamentoSearch(
+                                      nomeProduto: medicamento.nomeProduto,
+                                      apresentacao: medicamento.apresentacao,
+                                      onPressed: (){},
+                                    ),
+                                    IconButton(
+                                      onPressed: () {
+                                        setState(() {
+                                          if(medicamentosCotados.contains(medicamento)){
+                                            showDialog(
+                                              context: context,
+                                              builder: (BuildContext context) {
+                                                return AlertAviso(
+                                                  titulo: 'ATENÇÃO!',
+                                                  texto: 'O produto ja está inserido na cotação!'
+                                                );
+                                              },
+                                            );
+                                          } else {
+                                            medicamentosCotados.add(medicamento);
+                                          }
+                                        });
+                                      },
+                                      icon: const Icon(Icons.add, color: Colors.white,),
+                                    )
                                   ],
                                 ),
-                              ),
-                            )
-                          ],
+                            ],
+                          ),
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+                Container(
+                  width: 600,
+                  padding: const EdgeInsets.fromLTRB(16, 16,16, 10),
+                  decoration: BoxDecoration(
+                    color: const Color(0xff2EB6FC),
+                    borderRadius: BorderRadius.circular(10.0),
+                    border: Border.all(color: Colors.black45),
+                  ),
+                  child: Column(
+                    children: [
+                      const Text(
+                        'Nova cotacao',
+                        style: TextStyle(
+                          fontSize: 40,
+                          fontWeight: FontWeight.bold, color: Colors.white,
+                        ),
+                      ),
+                      ListView(
+                        shrinkWrap: true,
+                        children: [
+                          for(Medicamento medicamento in medicamentosCotados)
+                            Row(
+                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                WidgetMedicamentoCotado(
+                                  nomeProduto: medicamento.nomeProduto,
+                                  apresentacao: medicamento.apresentacao,
+                                ),
+                                IconButton(
+                                  onPressed: (){
+                                    setState(() {
+                                      medicamentosCotados.remove(medicamento);
+                                    });
+                                  },
+                                  icon: const Icon(Icons.delete, color: Colors.white,),
+                                )
+                              ],
+                            ),
+                        ],
+                      ),
+                      TextButton.icon(
+                        onPressed: (){
+                          showDialog(
+                            context: context,
+                            builder: (BuildContext context) {
+                              return AlertAviso(
+                                titulo: 'COTAÇÃO SOLICITADA!',
+                                texto: 'Enviamos sua cotação para os fornecedores e em até 24 horas será respondida. \n'
+                                  'Caso não seja respondida neste prazo, a cotação será excluída automaticamente.',
+                              );
+                            },
+                          );
+                        },
+                        icon: const Icon(Icons.vaccines),
+                        label: const Text('SOLICITAR COTACAO'),
+                        style: ButtonStyle(
+                          backgroundColor: MaterialStateProperty.all<Color>(const Color(0xffFFffff)),
+                          foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
+                          textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
+                            fontWeight: FontWeight.bold,
+                          ))
                         ),
                       ),
                     ],
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Container(
-                        width: 600,
-                        padding: const EdgeInsets.fromLTRB(16, 16,16, 10),
-                        decoration: BoxDecoration(
-                          color: const Color(0xff2EB6FC),
-                          borderRadius: BorderRadius.circular(10.0),
-                          border: Border.all(color: Colors.black45),
-                        ),
-                        child: Column(
-                          children: [
-                            const Text(
-                              'Nova cotacao',
-                              style: TextStyle(
-                                fontSize: 40,
-                                fontWeight: FontWeight.bold, color: Colors.white,
-                              ),
-                            ),
-                            ListView(
-                              shrinkWrap: true,
-                              children: [
-                                for(Medicamento medicamento in medicamentosCotados)
-                                  WidgetMedicamentoSearch(
-                                    nomeProduto: medicamento.nomeProduto,
-                                    apresentacao: medicamento.apresentacao,
-                                    onPressed: (){},
-                                  ),
-                              ],
-                            ),
-                            TextButton.icon(
-                              onPressed: (){
-                                showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return AlertDialog(
-                                      title: const Text('COTAÇÃO SOLICITADA!'),
-                                      content: const Text(
-                                        'Enviamos sua cotação para os fornecedores e em até 24 horas será respondida. \n'
-                                        'Caso não seja respondida neste prazo, a cotação será excluída automaticamente.'
-                                      ),
-                                      actions: [
-                                        TextButton(
-                                          child: const Text('Fechar'),
-                                          onPressed: () {
-                                            Navigator.pushNamed(context, '/Cotacao');
-                                          },
-                                        ),
-                                      ],
-                                    );
-                                  },
-                                );
-                              },
-                              icon: const Icon(Icons.vaccines),
-                              label: const Text('SOLICITAR COTACAO'),
-                              style: ButtonStyle(
-                                backgroundColor: MaterialStateProperty.all<Color>(const Color(0xffFFffff)),
-                                foregroundColor: MaterialStateProperty.all<Color>(Colors.black),
-                                textStyle: MaterialStateProperty.all<TextStyle>(const TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ))
-                              ),
-                            ),
-                          ],
-                        ),
-                      )
-                    ],
-                  )
-                ],
-              ),
+                )
+              ],
             ),
           )
         ],

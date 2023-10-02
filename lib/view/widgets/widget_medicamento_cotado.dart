@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 
-class WidgetMedicamentoSearch extends StatelessWidget {
+
+class WidgetMedicamentoCotado extends StatelessWidget {
 
   final String nomeProduto;
   final String apresentacao;
-  final Function onPressed;
 
-  const WidgetMedicamentoSearch({
+  const WidgetMedicamentoCotado({
     super.key,
     required this.nomeProduto,
     required this.apresentacao,
-    required this.onPressed,
   });
 
   @override
@@ -18,12 +17,9 @@ class WidgetMedicamentoSearch extends StatelessWidget {
     return Card(
       color: Colors.white,
       child: Container(
-        padding: EdgeInsets.all(6),
-        height: 40, width: 510,
-        child: TextButton(
-          onPressed: () {
-            onPressed;
-          },
+          padding: const EdgeInsets.all(6),
+          height: 40,
+          width: 510,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
@@ -39,11 +35,10 @@ class WidgetMedicamentoSearch extends StatelessWidget {
               const SizedBox(width: 5,),
               Text(
                 apresentacao,
-                style: const TextStyle(fontSize: 10 ,color: Colors.black),)
-              ,
+                style: const TextStyle(fontSize: 10 ,color: Colors.black),
+              ),
             ],
-          ),
-        )
+          )
       ),
     );
   }
