@@ -25,6 +25,7 @@ class DrawerCDC extends StatelessWidget {
           ListTile(
             title: const Text('Minhas Cotacoes'),
             onTap: () {
+              Navigator.pushNamed(context, '/MinhasCotacoes');
             },
           ),
           ListTile(

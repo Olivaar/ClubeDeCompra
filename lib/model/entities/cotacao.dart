@@ -6,11 +6,10 @@ class Cotacao {
   late String id;
   late Timestamp data;
   late List<String> medicamentos = [];
-  late String? status;
+  late String? status = 'PENDENTE';
   late double? valor;
 
   Cotacao({
-    required this.id,
     required this.data,
     required this.medicamentos,
     this.status,

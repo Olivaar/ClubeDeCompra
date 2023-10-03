@@ -2,6 +2,8 @@ import 'package:clube_de_compra/model/entities/medicamento.dart';
 
 class MedicamentoController {
   List<Medicamento> medicamentos = [];
+  late List<Medicamento> medicamentosPesquisados = [];
+  late List<Medicamento> medicamentosCotados = [];
 
   Medicamento medicamentoTeste = Medicamento(
     nomeProduto: 'SULFATO DE MAGNÉSIO HEPTAHIDRATADO',

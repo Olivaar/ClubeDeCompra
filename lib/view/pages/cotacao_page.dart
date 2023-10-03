@@ -1,4 +1,7 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clube_de_compra/controller/cotacao_controller.dart';
 import 'package:clube_de_compra/controller/medicamento_controller.dart';
+import 'package:clube_de_compra/model/entities/cotacao.dart';
 import 'package:clube_de_compra/model/entities/medicamento.dart';
 import 'package:clube_de_compra/view/widgets/alert_aviso.dart';
 import 'package:clube_de_compra/view/widgets/appBar_clube_de_compra.dart';
@@ -21,18 +24,17 @@ class _CotacaoPageState extends State<CotacaoPage> {
   @override
   void initState(){
     super.initState();
-    homeController.aux();
+    medicamentoController.aux();
   }
 
-  TextEditingController medicamentoController = TextEditingController();
-  MedicamentoController homeController = MedicamentoController();
-  late List<Medicamento> medicamentosSearch = [];
-  late List<Medicamento> medicamentosCotados = [];
+  TextEditingController pesquisaController = TextEditingController();
+  MedicamentoController medicamentoController = MedicamentoController();
+  CotacaoController cotacaoController = CotacaoController();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBarCDC(),
+      appBar: const AppBarCDC(),
       body: Stack(
         children: [
           Container(
@@ -75,7 +77,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                           SizedBox(
                             width: 400,
                             child: TextFormField(
-                              controller: medicamentoController,
+                              controller: pesquisaController,
                               decoration: ThemeHelper().textInputDecoration(
                                 'Pesquise um produto', 'Digite o nome do produto...',
                               ),
@@ -97,7 +99,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                           child: ListView(
                             shrinkWrap: true,
                             children: [
-                              for(Medicamento medicamento in medicamentosSearch)
+                              for(Medicamento medicamento in medicamentoController.medicamentosPesquisados)
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
@@ -109,7 +111,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                                     IconButton(
                                       onPressed: () {
                                         setState(() {
-                                          if(medicamentosCotados.contains(medicamento)){
+                                          if(medicamentoController.medicamentosCotados.contains(medicamento)){
                                             showDialog(
                                               context: context,
                                               builder: (BuildContext context) {
@@ -120,7 +122,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                                               },
                                             );
                                           } else {
-                                            medicamentosCotados.add(medicamento);
+                                            medicamentoController.medicamentosCotados.add(medicamento);
                                           }
                                         });
                                       },
@@ -155,7 +157,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                       ListView(
                         shrinkWrap: true,
                         children: [
-                          for(Medicamento medicamento in medicamentosCotados)
+                          for(Medicamento medicamento in medicamentoController.medicamentosCotados)
                             Row(
                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
@@ -166,7 +168,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
                                 IconButton(
                                   onPressed: (){
                                     setState(() {
-                                      medicamentosCotados.remove(medicamento);
+                                      medicamentoController.medicamentosCotados.remove(medicamento);
                                     });
                                   },
                                   icon: const Icon(Icons.delete, color: Colors.white,),
@@ -177,16 +179,35 @@ class _CotacaoPageState extends State<CotacaoPage> {
                       ),
                       TextButton.icon(
                         onPressed: (){
-                          showDialog(
-                            context: context,
-                            builder: (BuildContext context) {
-                              return AlertAviso(
-                                titulo: 'COTAÇÃO SOLICITADA!',
-                                texto: 'Enviamos sua cotação para os fornecedores e em até 24 horas será respondida. \n'
-                                  'Caso não seja respondida neste prazo, a cotação será excluída automaticamente.',
-                              );
-                            },
-                          );
+                          if(medicamentoController.medicamentosCotados.isNotEmpty){
+                            List<String> cotacaoString = medicamentoController.medicamentosCotados
+                                .map((medicamento) => medicamento.nomeProduto).toList();
+                            Cotacao cot = Cotacao(
+                              data: Timestamp.now(),
+                              medicamentos: cotacaoString,
+                            );
+                            cotacaoController.creatCotacao(cot);
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertAviso(
+                                  titulo: 'COTAÇÃO SOLICITADA!',
+                                  texto: 'Enviamos sua cotação para os fornecedores e em até 24 horas será respondida. \n'
+                                      'Caso não seja respondida neste prazo, a cotação será excluída automaticamente.',
+                                );
+                              },
+                            );
+                          }else{
+                            showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return AlertAviso(
+                                  titulo: 'ATENÇÃO!',
+                                  texto: 'A cotação deve conter ao menos um medicamento!'
+                                );
+                              },
+                            );
+                          }
                         },
                         icon: const Icon(Icons.vaccines),
                         label: const Text('SOLICITAR COTACAO'),
@@ -212,10 +233,10 @@ class _CotacaoPageState extends State<CotacaoPage> {
 
   buscarMedicamentos() {
     // Obtém o texto da pesquisa do medicamentoController
-    String textoPesquisa = medicamentoController.text.toLowerCase();
+    String textoPesquisa = pesquisaController.text.toLowerCase();
 
     // Filtra os medicamentos da lista medicamentos da classe MedicamentoController
-    List<Medicamento> resultados = homeController.medicamentos.where((medicamento) {
+    List<Medicamento> resultados = medicamentoController.medicamentos.where((medicamento) {
       // Converte o nomeProduto do medicamento para minúsculas e compara com o texto de pesquisa
       String nomeProdutoEmMinusculas = medicamento.nomeProduto.toLowerCase();
       return nomeProdutoEmMinusculas.contains(textoPesquisa);
@@ -223,7 +244,7 @@ class _CotacaoPageState extends State<CotacaoPage> {
 
     // Atualiza a lista medicamentosSearch com os resultados da pesquisa
     setState(() {
-      medicamentosSearch = resultados;
+      medicamentoController.medicamentosPesquisados = resultados;
     });
   }
 
